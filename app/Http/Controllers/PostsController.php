@@ -98,8 +98,11 @@ class PostsController extends Controller
      
 
         if ($post) {
-            if (!$post || (!$post->active && !Auth::user()->super)) {
-                // Post not found or deactivated for normal users
+            if (!$post->active && (!auth()->check() || !auth()->user()->super)) {
+                // Post not found or deactivated for normal users or guests
+                abort(403, 'You are not authorized to access this resource.');
+
+               // abort(404);
                 return redirect('/blog')->with('error', 'This post is not accessible.');
             }
             // Store the last viewed post ID in the session
@@ -166,7 +169,7 @@ class PostsController extends Controller
             // Update the other fields
             $post->title = $request->title;
             $post->description = $request->description;
-            $post->user_id = auth()->user()->id;
+          
             $post->save();
     
             return redirect('/blog/' . $slug)->with('updateSuccess', true);

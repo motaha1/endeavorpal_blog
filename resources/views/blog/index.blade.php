@@ -32,51 +32,43 @@
 
     </span> --}}
 </div>
-<div class="post-grid">
-@foreach ($posts as $post)
-
-
-
-
-<div class="col-6 col-md-4 mb-4 post-container {{ !$post->active ? 'inactive-post' : '' }}">
-
-
-  <div class="post-news">
-      <div class="post-news-image">
-          <img src="/images/{{ $post->image_path }}" alt="" width="469" height="200">
-      </div>
-      <div class="post-news-body">
-          <div class="unit unit-horizontal">
-              <div class="unit-left">
-                  <time class="post-news-time" datetime="{{ $post->updated_at }}">
-                      <span class="big">{{ date('d', strtotime($post->updated_at)) }}</span>
-                      <span class="small">{{ date('F', strtotime($post->updated_at)) }}</span>
-                  </time>
-              </div>
-              <div class="unit-body">
-                  <p class="post-news-title">
-                      <a href="/blog/{{ $post->slug }}/">{{ $post->title }}</a>
-                  </p>
-                  <div class="post-news-text">
-                      <p>{{ $post->description }}</p>
-                      <span class="text-gray-500 italic">by: {{ $post->user->name }}</span>
-                  </div>
-              </div>
-          </div>
-      </div>
-      <!-- Add your button here -->
-      <div class="button-container">
-          <a href="/blog/{{$post->slug}}/" class="button">Read More</a>
-      </div>
-  </div>
+<div class="row">
+    @foreach ($posts as $post)
+        <div class="col-12 col-sm-6 col-md-4 col-lg-3 mb-4">
+            <div class="post-container {{ !$post->active ? 'inactive-post' : '' }}">
+                <div class="post-news">
+                    <div class="post-news-image">
+                        <img src="/images/{{ $post->image_path }}" alt="" class="img-fluid">
+                    </div>
+                    <div class="post-news-body">
+                        <p class="post-news-title">
+                            <a href="/blog/{{ $post->slug }}/">{{ $post->title }}</a>
+                        </p>
+                        <div class="post-news-text">
+                            <p>{{ strlen($post->description) > 60 ? substr($post->description, 0, 100) . '...' : $post->description }}</p>
+                            <span class="text-gray-500 italic">by: {{ $post->user->name }}</span>
+                        </div>
+                    </div>
+                    <div class="unit unit-horizontal">
+                        <div class="unit-left">
+                            <time class="post-news-time" datetime="{{ $post->created_at }}">
+                                <span class="big">{{ date('d', strtotime($post->created_at)) }}</span>
+                                <span class="small">{{ date('F', strtotime($post->created_at)) }}</span>
+                            </time>
+                        </div>
+                        <div class="unit-body">
+                            <div class="button-container">
+                                <a href="/blog/{{$post->slug}}/" class="button">Read More</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    @endforeach
 </div>
 
 
-
-
-
-@endforeach
-</div>
 
   <script src="{{ asset('js/core.min.js') }}"></script>
 

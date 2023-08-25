@@ -96,48 +96,41 @@ body {
             <ul class="comment-list">
                 <li class="comment">
                     <div class="comment-content">
-                        <strong>{{$item->user->name}} : </strong> {{$item->body}}
+                        <strong>{{$item->user->name}} : </strong> {{$item->body}} | Created at: {{$item->created_at->format('F d, Y')}}
                     </div>
-                    @if (Auth::check() && Auth::user()->super == 1)
-    <div class="comment-actions d-flex justify-content-between">
-        <div>
-        
-                <form action="{{ route('comments.toggleActivation', ['comment' => $item->id]) }}" method="POST">
-                    @csrf
-                    @method('PUT')
-                    <button type="submit" class="btn btn-sm {{ !$item->active ? 'btn-danger' : 'btn-success' }}">
-                        {{ !$item->active ? "It's Deactive" : "It's Active" }}
-                    </button>
-                </form>
-        </div>
-        <div>
-            <button type="button" class="btn btn-sm btn-primary edit-comment-button" data-toggle="modal" data-target="#editCommentModal" data-comment-id="{{ $item->id }}" data-comment-body="{{ $item->body }}">Edit</button>
-
-            @if (Auth::user()->id === $item->user_id)
-                <form class="d-inline" action="/comment/{{$item->id}}" method="POST">
-                    @csrf
-                    @method('DELETE')
-                    <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
-                </form>
-            @endif
-        </div>
-    </div>
-@endif
-
-                    {{-- @if (Auth::check() && Auth::user()->id === $item->user_id)
-                        <div class="comment-actions">
-                            <button type="button" class="btn btn-sm btn-primary edit-comment-button" data-toggle="modal" data-target="#editCommentModal" data-comment-id="{{ $item->id }}" data-comment-body="{{ $item->body }}">Edit</button>
-
-                            <form class="d-inline" action="/comment/{{$item->id}}" method="POST">
+                @if(Auth::user() &&Auth::user()->super == 1)
+                    <div class="comment-actions d-flex justify-content-between">
+                        <div>
+                            <form action="{{ route('comments.toggleActivation', ['comment' => $item->id]) }}" method="POST">
                                 @csrf
-                                @method('DELETE')
-                                <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                                @method('PUT')
+                                <button type="submit" class="btn btn-sm {{ !$item->active ? 'btn-danger' : 'btn-success' }}">
+                                    {{ !$item->active ? "It's Deactive" : "It's Active" }}
+                                </button>
                             </form>
                         </div>
-                    @endif --}}
+                        <div>
+                            @endif
+                            @if (Auth::check())
+                                @if (Auth::user()->id === $item->user_id || Auth::user()->super == 1)
+                                    <button type="button" class="btn btn-sm btn-primary edit-comment-button" data-toggle="modal" data-target="#editCommentModal" data-comment-id="{{ $item->id }}" data-comment-body="{{ $item->body }}">Edit</button>
+                                @endif
+                                @if (Auth::user()->id === $item->user_id)
+                                    <form class="d-inline" action="/comment/{{$item->id}}" method="POST">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button type="submit" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure you want to delete this comment?')">Delete</button>
+                                    </form>
+                                @endif
+                            @endif
+                        </div>
+                    </div>
+                 
                 </li>
             </ul>
-            @endforeach
+        @endforeach
+        
+        
         @if (Auth::user())
         <h3 class="mb-3">Add a Comment</h3>
         <form class="comment-form" method="POST" action="{{ route('comment.store') }}">

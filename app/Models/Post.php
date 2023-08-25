@@ -20,4 +20,14 @@ class Post extends Model
 {
     return $this->hasMany(Comment::class);
 }
+
+protected static function boot()
+{
+    parent::boot();
+
+    // Delete related comments when a post is deleted
+    static::deleting(function ($post) {
+        $post->comments()->delete(); // Delete all related comments
+    });
+}
 }
