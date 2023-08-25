@@ -1,0 +1,15 @@
+@import "tailwindcss/base";
+
+@import "tailwindcss/components";
+
+@import "tailwindcss/utilities";
+
+
+.hero{
+       
+       
+    background-image: url('https://picsum.photos/seed/picsum/960/620') no-repeat center center /cover ; 
+    background-attachment: fixed ; 
+    height: 600px;
+    
+}
